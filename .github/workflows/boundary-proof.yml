@@ -69,3 +69,120 @@ jobs:
           python -m pip install "git+https://github.com/paslaycorp/EPM---EVIDENTIARY-PROVENANCE-MODEL-.git@adb1c31cdb428816c95a3cf98c9a4427c13ec482"
       - name: Execute post-release boundary exam
         run: pytest -q tests/vnext
+
+  real-c2pa-boundary:
+    name: real C2PA manifest → EPM boundary
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout proof harness
+        # actions/checkout v6.1.0 (Node 24)
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+
+      - name: Checkout pinned C2PA specification metadata
+        # actions/checkout v6.1.0 (Node 24)
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: c2pa-org/specifications
+          ref: 4eb2c67f49bd21f188e7842afa16dfa642bb578c
+          path: vendor/c2pa-spec
+          sparse-checkout: README.md
+          persist-credentials: false
+
+      - name: Checkout pinned C2PA tool fixture
+        # actions/checkout v6.1.0 (Node 24)
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          repository: contentauth/c2patool
+          ref: e96d7c396f91848dd55bbfd56a5aec6cbe9352f2
+          path: vendor/c2patool
+          sparse-checkout: sample
+          persist-credentials: false
+
+      - name: Set up Python
+        # actions/setup-python v7.0.0 (Node 24)
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with:
+          python-version: "3.13.15"
+
+      - name: Verify published C2PA specification pointer
+        run: grep -F "specifications/specifications/2.4/" vendor/c2pa-spec/README.md
+
+      - name: Install immutable post-release EPM pin
+        run: |
+          python -m pip install "pip==26.2.1"
+          python -m pip install "git+https://github.com/paslaycorp/EPM---EVIDENTIARY-PROVENANCE-MODEL-.git@adb1c31cdb428816c95a3cf98c9a4427c13ec482"
+
+      - name: Install checksum-pinned c2patool
+        run: |
+          curl --fail --location --retry 3 \
+            --output /tmp/c2patool.tar.gz \
+            "https://github.com/contentauth/c2pa-rs/releases/download/c2patool-v0.27.22/c2patool-v0.27.22-x86_64-unknown-linux-gnu.tar.gz"
+          echo "6f138ad53da1a62f1cd6ee71c60727efa27d13b811f4c0ea8c2a8528968b358b  /tmp/c2patool.tar.gz" | sha256sum --check -
+          mkdir -p /tmp/c2patool-release
+          tar -xzf /tmp/c2patool.tar.gz -C /tmp/c2patool-release
+          tool="$(find /tmp/c2patool-release -type f -name c2patool -print -quit)"
+          test -n "$tool"
+          install -m 0755 "$tool" "$RUNNER_TEMP/c2patool"
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+
+      - name: Verify c2patool release
+        run: |
+          c2patool -V | tee /tmp/c2patool-version.txt
+          grep -F "0.27.22" /tmp/c2patool-version.txt
+
+      - name: Verify real C2PA manifest and enforce EPM boundary
+        run: |
+          c2patool vendor/c2patool/sample/C.jpg > /tmp/c2pa-good.json
+          python tools/real_c2pa_boundary.py /tmp/c2pa-good.json /tmp/boundary-receipt.json
+
+      - name: Mutate signed asset inside JPEG scan data
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          source = Path("vendor/c2patool/sample/C.jpg")
+          target = Path("/tmp/c2pa-tampered.jpg")
+          data = bytearray(source.read_bytes())
+          sos = data.find(b"\xff\xda")
+          assert sos >= 0, "JPEG Start of Scan marker not found"
+          segment_length = int.from_bytes(data[sos + 2 : sos + 4], "big")
+          scan_start = sos + 2 + segment_length
+          eoi = data.rfind(b"\xff\xd9")
+          assert scan_start < eoi, "JPEG scan region not found"
+          candidate = scan_start + (eoi - scan_start) // 2
+          for index in range(candidate, min(eoi, candidate + 4096)):
+              if data[index] not in (0x00, 0xFF):
+                  data[index] ^= 0x01
+                  break
+          else:
+              raise AssertionError("No safe entropy-coded byte found to mutate")
+          target.write_bytes(data)
+          PY
+
+      - name: Require tamper detection
+        run: |
+          set +e
+          c2patool /tmp/c2pa-tampered.jpg > /tmp/c2pa-tampered.json 2> /tmp/c2pa-tampered.stderr
+          rc=$?
+          set -e
+          printf '%s\n' "$rc" > /tmp/c2pa-tampered-exit.txt
+          if [ "$rc" -eq 0 ]; then
+            python tools/assert_c2pa_tamper.py /tmp/c2pa-tampered.json
+          else
+            echo "c2patool rejected the mutated asset with exit code $rc"
+          fi
+
+      - name: Upload boundary evidence
+        if: always()
+        # actions/upload-artifact v7.0.1 (Node 24)
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: c2pa-epm-boundary-evidence
+          path: |
+            /tmp/c2patool-version.txt
+            /tmp/c2pa-good.json
+            /tmp/boundary-receipt.json
+            /tmp/c2pa-tampered.json
+            /tmp/c2pa-tampered.stderr
+            /tmp/c2pa-tampered-exit.txt
+          retention-days: 30
