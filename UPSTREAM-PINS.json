@@ -1,0 +1,43 @@
+{
+  "schema": "c2pa-epm-boundary-proof/upstream-pins/2",
+  "epm": {
+    "frozen_release": {
+      "tag": "v0.1.2",
+      "commit": "bb0559ddb8eff7f78acc432c0334ce7596c1045c",
+      "role": "released evidentiary transition boundary"
+    },
+    "post_release_authority": {
+      "commit": "adb1c31cdb428816c95a3cf98c9a4427c13ec482",
+      "role": "post-release authority and constitutional hardening surface",
+      "release_claim": false
+    }
+  },
+  "c2pa": {
+    "specification": {
+      "published_version": "2.4",
+      "repository": "c2pa-org/specifications",
+      "repository_commit": "4eb2c67f49bd21f188e7842afa16dfa642bb578c",
+      "repository_tag": null,
+      "note": "The pinned repository README identifies the published specification as 2.4; the repository currently exposes release tags through 2.3."
+    },
+    "tool": {
+      "name": "c2patool",
+      "release": "0.27.22",
+      "release_repository": "contentauth/c2pa-rs",
+      "release_target_commit": "1a56d244ee77d7e58221eabebede4281d9e868a4",
+      "linux_x86_64_asset": "c2patool-v0.27.22-x86_64-unknown-linux-gnu.tar.gz",
+      "linux_x86_64_sha256": "6f138ad53da1a62f1cd6ee71c60727efa27d13b811f4c0ea8c2a8528968b358b"
+    },
+    "fixture": {
+      "repository": "contentauth/c2patool",
+      "repository_commit": "e96d7c396f91848dd55bbfd56a5aec6cbe9352f2",
+      "path": "sample/C.jpg",
+      "role": "pinned signed sample used for interoperability boundary testing; not a C2PA conformance fixture"
+    },
+    "public_testfiles_reference": {
+      "repository": "c2pa-org/public-testfiles",
+      "repository_commit": "22beccc075707475b038d8789d0136c009e43143",
+      "role": "reference corpus only; no 2.4 conformance claim is derived from it"
+    }
+  }
+}

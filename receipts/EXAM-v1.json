@@ -1,0 +1,67 @@
+{
+  "schema": "c2pa-epm-boundary-proof/exam-result/1",
+  "exam": "last-exam-v1",
+  "tested_head": "4725bf0b55e3fafb64ce65d26ae6c3b65ce01bde",
+  "workflow": {
+    "name": "C2PA-EPM Boundary Proof",
+    "run_id": 35542651303,
+    "run_number": 14,
+    "event": "push",
+    "conclusion": "success"
+  },
+  "pins": {
+    "epm_frozen_v0_1_2": "bb0559ddb8eff7f78acc432c0334ce7596c1045c",
+    "epm_post_release": "adb1c31cdb428816c95a3cf98c9a4427c13ec482",
+    "c2pa_specification_published_version": "2.4",
+    "c2pa_specification_repository_commit": "4eb2c67f49bd21f188e7842afa16dfa642bb578c",
+    "c2patool": "0.27.22",
+    "c2patool_linux_sha256": "6f138ad53da1a62f1cd6ee71c60727efa27d13b811f4c0ea8c2a8528968b358b",
+    "c2patool_fixture_repository_commit": "e96d7c396f91848dd55bbfd56a5aec6cbe9352f2"
+  },
+  "regression_lanes": {
+    "frozen_python_3_12": {"passed": 4, "expected_falsifications": 2},
+    "frozen_python_3_13": {"passed": 4, "expected_falsifications": 2},
+    "post_release_python_3_12": {"passed": 11, "failed": 0},
+    "post_release_python_3_13": {"passed": 11, "failed": 0}
+  },
+  "real_c2pa_boundary": {
+    "active_manifest": "contentauth:urn:uuid:5a08e472-974c-422e-b38a-d6c7326481a5",
+    "manifest_count": 1,
+    "validation_status_count": 0,
+    "changed_purpose": {
+      "decision": "DENY",
+      "failure": "MISAPPLICATION",
+      "fail_closed": true
+    },
+    "authority_without_basis": {
+      "decision": "DEFER",
+      "failure": "AUTHORITY_UNESTABLISHED",
+      "permitted": false,
+      "fail_closed": true
+    },
+    "tamper_trial": {
+      "c2patool_exit_code": 0,
+      "validation_state": "Invalid",
+      "validation_status_code": "assertion.dataHash.mismatch",
+      "tamper_detected": true
+    }
+  },
+  "artifact": {
+    "artifact_id": 10615317490,
+    "name": "c2pa-epm-boundary-evidence",
+    "sha256": "536fd343385c376ecf34e49b09260a9e2eb4419082f87548cdb379b804f30608"
+  },
+  "falsification_history": {
+    "initial_real_c2pa_run_id": 35542568099,
+    "initial_result": "failure",
+    "finding": "The sample was structurally valid but the test signing certificate was untrusted under the default trust store.",
+    "narrow_correction": "Bind the sample repository's pinned allowed_list.pem and store.cfg explicitly.",
+    "upstream_epm_changed": false
+  },
+  "claim_boundary": {
+    "c2pa_conformance_claim": false,
+    "c2pa_endorsement_claim": false,
+    "epm_release_modified": false,
+    "production_authority_modified": false
+  }
+}
