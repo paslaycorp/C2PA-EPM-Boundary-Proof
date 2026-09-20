@@ -132,7 +132,10 @@ jobs:
 
       - name: Verify real C2PA manifest and enforce EPM boundary
         run: |
-          c2patool vendor/c2patool/sample/C.jpg > /tmp/c2pa-good.json
+          c2patool vendor/c2patool/sample/C.jpg trust \
+            --allowed_list vendor/c2patool/sample/allowed_list.pem \
+            --trust_config vendor/c2patool/sample/store.cfg \
+            > /tmp/c2pa-good.json
           python tools/real_c2pa_boundary.py /tmp/c2pa-good.json /tmp/boundary-receipt.json
 
       - name: Mutate signed asset inside JPEG scan data
@@ -162,7 +165,10 @@ jobs:
       - name: Require tamper detection
         run: |
           set +e
-          c2patool /tmp/c2pa-tampered.jpg > /tmp/c2pa-tampered.json 2> /tmp/c2pa-tampered.stderr
+          c2patool /tmp/c2pa-tampered.jpg trust \
+            --allowed_list vendor/c2patool/sample/allowed_list.pem \
+            --trust_config vendor/c2patool/sample/store.cfg \
+            > /tmp/c2pa-tampered.json 2> /tmp/c2pa-tampered.stderr
           rc=$?
           set -e
           printf '%s\n' "$rc" > /tmp/c2pa-tampered-exit.txt
