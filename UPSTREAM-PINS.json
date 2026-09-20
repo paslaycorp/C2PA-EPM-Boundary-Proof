@@ -1,0 +1,20 @@
+{
+  "schema": "c2pa-epm-boundary-proof/upstream-pins/1",
+  "epm": {
+    "frozen_release": {
+      "tag": "v0.1.2",
+      "commit": "bb0559ddb8eff7f78acc432c0334ce7596c1045c",
+      "role": "released evidentiary transition boundary"
+    },
+    "post_release_authority": {
+      "commit": "adb1c31cdb428816c95a3cf98c9a4427c13ec482",
+      "role": "post-release authority and constitutional hardening surface",
+      "release_claim": false
+    }
+  },
+  "c2pa": {
+    "specification_pin": null,
+    "status": "NOT_YET_PINNED",
+    "reason": "This first exam establishes the EPM-side semantic boundary only. No C2PA conformance claim is made."
+  }
+}
