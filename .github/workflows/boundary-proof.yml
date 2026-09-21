@@ -6,7 +6,7 @@ on:
       - main
       - 'exam/**'
   pull_request:
-    branches: [main]
+    branches: [main, 'exam/**']
 
 permissions:
   contents: read
@@ -68,7 +68,7 @@ jobs:
           python -m pip install "pytest==8.4.2"
           python -m pip install "git+https://github.com/paslaycorp/EPM---EVIDENTIARY-PROVENANCE-MODEL-.git@adb1c31cdb428816c95a3cf98c9a4427c13ec482"
       - name: Execute post-release boundary exam
-        run: pytest -q tests/vnext
+        run: pytest -q tests/v*
 
   real-c2pa-boundary:
     name: real C2PA manifest → EPM boundary
@@ -130,6 +130,10 @@ jobs:
           c2patool -V | tee /tmp/c2patool-version.txt
           grep -F "0.27.22" /tmp/c2patool-version.txt
 
+      - name: Capture default trust semantics
+        run: |
+          c2patool vendor/c2patool/sample/C.jpg > /tmp/c2pa-default-trust.json
+
       - name: Verify real C2PA manifest and enforce EPM boundary
         run: |
           c2patool vendor/c2patool/sample/C.jpg trust \
@@ -178,6 +182,14 @@ jobs:
             echo "c2patool rejected the mutated asset with exit code $rc"
           fi
 
+      - name: Enforce Exam v2 trust separation
+        run: |
+          python tools/exam_v2_trust.py \
+            /tmp/c2pa-good.json \
+            /tmp/c2pa-default-trust.json \
+            /tmp/c2pa-tampered.json \
+            /tmp/exam-v2-trust.json
+
       - name: Upload boundary evidence
         if: always()
         # actions/upload-artifact v7.0.1 (Node 24)
@@ -187,7 +199,9 @@ jobs:
           path: |
             /tmp/c2patool-version.txt
             /tmp/c2pa-good.json
+            /tmp/c2pa-default-trust.json
             /tmp/boundary-receipt.json
+            /tmp/exam-v2-trust.json
             /tmp/c2pa-tampered.json
             /tmp/c2pa-tampered.stderr
             /tmp/c2pa-tampered-exit.txt
