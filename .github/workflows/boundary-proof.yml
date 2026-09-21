@@ -67,6 +67,7 @@ jobs:
           python -m pip install "pip==26.2.1"
           python -m pip install "pytest==8.4.2"
           python -m pip install "git+https://github.com/paslaycorp/EPM---EVIDENTIARY-PROVENANCE-MODEL-.git@adb1c31cdb428816c95a3cf98c9a4427c13ec482"
+          python -m pip install --no-deps -e .
       - name: Execute post-release boundary exam
         run: pytest -q tests/v*
 
@@ -111,6 +112,7 @@ jobs:
         run: |
           python -m pip install "pip==26.2.1"
           python -m pip install "git+https://github.com/paslaycorp/EPM---EVIDENTIARY-PROVENANCE-MODEL-.git@adb1c31cdb428816c95a3cf98c9a4427c13ec482"
+          python -m pip install --no-deps -e .
 
       - name: Install checksum-pinned c2patool
         run: |
