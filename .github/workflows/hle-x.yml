@@ -51,6 +51,9 @@ jobs:
           python -m pip install "git+https://github.com/paslaycorp/EPM---EVIDENTIARY-PROVENANCE-MODEL-.git@adb1c31cdb428816c95a3cf98c9a4427c13ec482"
           python -m pip install --no-deps -e .
 
+      - name: Compile live runner
+        run: python -m py_compile tools/hle_x_live_run.py
+
       - name: Run HLE-X synthetic falsification suite
         run: pytest -q tests/hle_x
 
