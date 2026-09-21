@@ -7,7 +7,7 @@ from epm import AssuranceState
 from boundary_proof.c2pa_adapter import C2PATrustState, parse_c2patool_report
 
 
-def _report(*, state: str = "Valid", statuses: list[dict[str, object]] | None = None):
+def _report(*, state: str = "Trusted", statuses: list[dict[str, object]] | None = None):
     return {
         "active_manifest": "contentauth:urn:uuid:test",
         "validation_state": state,
@@ -97,7 +97,7 @@ def test_status_order_and_duplicates_do_not_change_handoff():
 
 def test_unknown_status_never_upgrades_to_trusted():
     handoff = parse_c2patool_report(
-        _report(statuses=[{"code": "future.validation.status"}])
+        _report(state="Valid", statuses=[{"code": "future.validation.status"}])
     )
 
     assert handoff.trust_state is C2PATrustState.INDETERMINATE
