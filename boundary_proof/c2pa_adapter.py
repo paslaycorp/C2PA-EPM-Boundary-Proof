@@ -106,7 +106,7 @@ def parse_c2patool_report(document: Mapping[str, object]) -> C2PAHandoff:
             ),
         )
 
-    if validation_state == "Valid" and not codes:
+    if validation_state == "Trusted" and not codes:
         return C2PAHandoff(
             active_manifest=active_manifest,
             validation_state=validation_state,
