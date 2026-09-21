@@ -102,3 +102,19 @@ def test_unknown_status_never_upgrades_to_trusted():
 
     assert handoff.trust_state is C2PATrustState.INDETERMINATE
     assert handoff.provenance_state is AssuranceState.UNKNOWN
+
+
+def test_clean_valid_report_does_not_establish_signer_trust():
+    handoff = parse_c2patool_report(_report(state="Valid"))
+
+    assert handoff.trust_state is C2PATrustState.INDETERMINATE
+    assert handoff.provenance_state is AssuranceState.UNKNOWN
+
+
+def test_trusted_report_with_unknown_status_remains_indeterminate():
+    handoff = parse_c2patool_report(
+        _report(state="Trusted", statuses=[{"code": "future.validation.status"}])
+    )
+
+    assert handoff.trust_state is C2PATrustState.INDETERMINATE
+    assert handoff.provenance_state is AssuranceState.UNKNOWN
