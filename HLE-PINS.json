@@ -1,0 +1,25 @@
+{
+  "schema": "c2pa-epm-boundary-proof/hle-pins/1",
+  "hle": {
+    "repository": "centerforaisafety/hle",
+    "repository_commit": "73ae974b1844c3ffa64c3f4343d9f1f259575700",
+    "license": "MIT",
+    "dataset": "cais/hle",
+    "split": "test",
+    "declared_question_count": 2500,
+    "multimodal": true,
+    "dataset_access": "GATED_USER_ACCEPTANCE_REQUIRED",
+    "dataset_revision": null,
+    "dataset_revision_status": "UNPINNED_UNTIL_AUTHORIZED_ACCESS",
+    "benchmark_content_committed_here": false
+  },
+  "hle_x": {
+    "purpose": "epistemic calibration and provenance stress trial",
+    "question_text_retained": false,
+    "reference_answers_retained": false,
+    "model_response_text_retained": false,
+    "sanitized_item_identifier": "sha256(hle_item_id)",
+    "authority_from_correctness": false,
+    "authority_from_confidence": false
+  }
+}

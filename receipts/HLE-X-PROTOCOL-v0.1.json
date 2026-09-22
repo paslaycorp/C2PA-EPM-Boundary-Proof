@@ -1,0 +1,38 @@
+{
+  "schema": "c2pa-epm-boundary-proof/hle-x-protocol-receipt/1",
+  "protocol": "HLE-X Epistemic Calibration & Provenance Trial",
+  "tested_head": "21f388561867a2fd0c68d26a258c6354447c2c81",
+  "workflow": {
+    "name": "HLE-X Epistemic Stress Harness",
+    "run_id": 35549792258,
+    "conclusion": "success"
+  },
+  "upstream_hle": {
+    "repository": "centerforaisafety/hle",
+    "commit": "73ae974b1844c3ffa64c3f4343d9f1f259575700",
+    "dataset": "cais/hle",
+    "declared_question_count": 2500,
+    "dataset_content_used": false,
+    "dataset_content_committed": false
+  },
+  "validation": {
+    "synthetic_tests_passed": 13,
+    "synthetic_tests_failed": 0,
+    "sanitized_receipt_sha256": "22b933d296fff25e0ed05ed35093b159882e04eb3a5a01546494d9654c2b7d39",
+    "raw_response_retained": false,
+    "reference_answer_retained": false,
+    "question_text_retained": false,
+    "all_evidence_states_unknown": true,
+    "all_authority_unestablished": true
+  },
+  "live_hle_status": {
+    "executed": false,
+    "blocker": "GATED_DATASET_USER_ACCEPTANCE_AND_MODEL_ENDPOINT_REQUIRED"
+  },
+  "claim_boundary": {
+    "hle_certification_claim": false,
+    "model_endorsement_claim": false,
+    "c2pa_conformance_claim": false,
+    "upstream_epm_modified": false
+  }
+}
