@@ -1,0 +1,6 @@
+fastapi==0.115.0
+uvicorn[standard]==0.34.0
+requests==2.32.3
+c2pa-python==0.37.10
+pytest==8.3.5
+epm-evidentiary-provenance-model @ git+https://github.com/paslaycorp/EPM---EVIDENTIARY-PROVENANCE-MODEL-.git@bb0559ddb8eff7f78acc432c0334ce7596c1045c
