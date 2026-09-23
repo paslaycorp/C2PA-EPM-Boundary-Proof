@@ -6,6 +6,16 @@ function short(v, n=22) {
   return s.length > n ? `${s.slice(0,n)}…` : s;
 }
 
+function activeStatuses(validationResults) {
+  if (!validationResults || typeof validationResults !== "object") return {};
+  return validationResults.activeManifest || {};
+}
+
+function statusCodes(items) {
+  if (!Array.isArray(items) || items.length === 0) return "none";
+  return items.map(x => x && x.code ? x.code : String(x)).join(", ");
+}
+
 async function run(caseId) {
   document.querySelectorAll("button[data-case]").forEach(b => b.classList.toggle("active", b.dataset.case === caseId));
   const status = document.getElementById("status");
@@ -18,7 +28,14 @@ async function run(caseId) {
     const c = current.c2pa_receipt;
     const e = current.epm_transition_result;
     const a = current.external_action_authority;
+    const s = activeStatuses(c.validation_results);
+    const success = Array.isArray(s.success) ? s.success : [];
+    const informational = Array.isArray(s.informational) ? s.informational : [];
+    const failure = Array.isArray(s.failure) ? s.failure : [];
+
     document.getElementById("c2pa-state").textContent = short(c.validation_state, 60);
+    document.getElementById("c2pa-counts").textContent = `success=${success.length} · informational=${informational.length} · failure=${failure.length}`;
+    document.getElementById("c2pa-failures").textContent = statusCodes(failure);
     document.getElementById("asset-hash").textContent = c.asset_sha256;
     document.getElementById("manifest-hash").textContent = c.manifest_store_sha256;
     document.getElementById("active-manifest").textContent = short(c.active_manifest, 70);
