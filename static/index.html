@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>C2PA → EPM Boundary Proof</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">EXPERIMENTAL INTEROPERABILITY PROOF · NON-NORMATIVE</div>
+      <h1>C2PA → EPM Boundary Proof</h1>
+      <p class="thesis">C2PA provenance remains intact while downstream evidentiary context changes. No provenance result is silently converted into external authority.</p>
+      <div class="notice">No C2PA conformance or endorsement claim. EPM v0.1.2 is consumed at its exact released commit; the demonstrator is a separate adapter.</div>
+    </header>
+
+    <section class="controls">
+      <button data-case="baseline" class="active">1 · Baseline</button>
+      <button data-case="purpose-change">2 · Change purpose</button>
+      <button data-case="time-change">3 · Change time</button>
+      <button id="download">Download proof JSON</button>
+    </section>
+
+    <section id="status" class="status">Running proof…</section>
+
+    <section class="grid">
+      <article>
+        <h2>C2PA validation · untouched</h2>
+        <dl>
+          <dt>Validation state</dt><dd id="c2pa-state">—</dd>
+          <dt>Status counts</dt><dd id="c2pa-counts">—</dd>
+          <dt>Failure status codes</dt><dd id="c2pa-failures">—</dd>
+          <dt>Asset SHA-256</dt><dd id="asset-hash">—</dd>
+          <dt>Manifest-store SHA-256</dt><dd id="manifest-hash">—</dd>
+          <dt>Active manifest</dt><dd id="active-manifest">—</dd>
+        </dl>
+        <p class="reason">Top-level validation state and detailed C2PA status codes are shown separately. This demonstrator does not reinterpret either as a trust or authorization verdict.</p>
+        <details><summary>Raw C2PA validation results</summary><pre id="c2pa-results"></pre></details>
+      </article>
+
+      <article>
+        <h2>EPM boundary · exact v0.1.2</h2>
+        <dl>
+          <dt>Context delta</dt><dd id="context-delta">—</dd>
+          <dt>Transition state</dt><dd id="epm-state">—</dd>
+          <dt>Transition decision</dt><dd id="epm-decision">—</dd>
+          <dt>Failure code</dt><dd id="epm-failure">—</dd>
+        </dl>
+        <p id="epm-reason" class="reason"></p>
+        <details><summary>Exact EPM input</summary><pre id="epm-input"></pre></details>
+      </article>
+
+      <article class="authority">
+        <h2>External action authority</h2>
+        <div id="authority-status" class="authority-badge">—</div>
+        <p id="authority-reason"></p>
+        <p class="equation">PROVENANCE VALIDITY ≠ EVIDENTIARY APPLICABILITY ≠ EXTERNAL PERMISSION</p>
+      </article>
+    </section>
+
+    <section class="proofline">
+      <h2>Reproducibility</h2>
+      <dl>
+        <dt>Proof SHA-256</dt><dd id="proof-hash">—</dd>
+        <dt>EPM release</dt><dd id="epm-version">—</dd>
+        <dt>C2PA semantics mutated</dt><dd id="mutated">—</dd>
+        <dt>Authority imported</dt><dd id="authority-imported">—</dd>
+      </dl>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
