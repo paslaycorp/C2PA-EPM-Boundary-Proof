@@ -39,7 +39,7 @@ jobs:
       - name: Generate deterministic proof bundle
         if: github.event_name != 'pull_request'
         run: |
-          python scripts/build_proofs.py
+          PYTHONPATH=. python scripts/build_proofs.py
           python - <<'PY'
           import hashlib, pathlib, zipfile
           out = pathlib.Path("dist/c2pa-epm-boundary-proofs.zip")
